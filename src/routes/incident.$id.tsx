@@ -107,7 +107,7 @@ function IncidentPage() {
         {alertBanner && (
           <div className="mt-6 flex items-start gap-3 rounded-xl border border-critical/30 bg-critical-soft p-4">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-critical" />
-            <p className="text-sm font-semibold text-critical">⚠️ NEW: {alertBanner}</p>
+            <p className="text-sm font-semibold text-critical">NEW: {alertBanner}</p>
           </div>
         )}
 
