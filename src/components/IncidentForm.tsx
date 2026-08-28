@@ -57,28 +57,30 @@ export function IncidentForm({
       }}
     >
       <div>
-        <h2 className="text-2xl font-bold text-foreground">{heading}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{hint}</p>
+        <h2 className="text-[1.6rem] font-bold tracking-tight text-foreground">{heading}</h2>
+        <p className="mt-1.5 text-[0.95rem] leading-relaxed text-muted-foreground">{hint}</p>
       </div>
 
-      <textarea
-        value={report}
-        onChange={(e) => setReport(e.target.value)}
-        placeholder={placeholder}
-        rows={5}
-        className="w-full resize-none rounded-xl border border-input bg-card p-4 text-base leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground/70 focus:border-ring focus:ring-4 focus:ring-ring/15"
-      />
+      <div className="field-soft focus-within:field-soft-focus">
+        <textarea
+          value={report}
+          onChange={(e) => setReport(e.target.value)}
+          placeholder={placeholder}
+          rows={5}
+          className="w-full resize-none bg-transparent p-4 text-base leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/70"
+        />
+      </div>
 
       {showLocation && (
         <label className="block">
           <span className="mono-caps text-muted-foreground">Location</span>
-          <div className="mt-2 flex items-center gap-2 rounded-xl border border-input bg-card px-3">
+          <div className="field-soft mt-2 flex items-center gap-2 px-4 focus-within:field-soft-focus">
             <MapPin className="size-4 shrink-0 text-primary" />
             <input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder={locating ? "Finding you…" : "Street, landmark or coordinates"}
-              className="w-full bg-transparent py-3 text-base text-foreground outline-none placeholder:text-muted-foreground/70"
+              className="w-full bg-transparent py-3.5 text-base text-foreground outline-none placeholder:text-muted-foreground/70"
             />
             {locating && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
           </div>
@@ -87,22 +89,28 @@ export function IncidentForm({
 
       <label className="block">
         <span className="mono-caps text-muted-foreground">Your name (optional)</span>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="So the next person knows who to thank"
-          className="mt-2 w-full rounded-xl border border-input bg-card px-4 py-3 text-base text-foreground outline-none transition placeholder:text-muted-foreground/70 focus:border-ring focus:ring-4 focus:ring-ring/15"
-        />
+        <div className="field-soft mt-2 px-4 focus-within:field-soft-focus">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="So the next person knows who to thank"
+            className="w-full bg-transparent py-3.5 text-base text-foreground outline-none placeholder:text-muted-foreground/70"
+          />
+        </div>
       </label>
 
       <button
         type="submit"
         disabled={disabled}
-        className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-[var(--shadow-lift)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+        className="btn-primary-soft inline-flex h-[3.5rem] w-full items-center justify-center gap-2 text-[1.05rem] font-semibold hover:brightness-[1.06] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
       >
         {busy && <Loader2 className="size-5 animate-spin" />}
         {busy ? "Saving…" : submitLabel}
       </button>
+      <p className="-mt-1 text-center text-xs text-muted-foreground">
+        Plain words are fine. You can add more at any time.
+      </p>
     </form>
   );
 }
+
