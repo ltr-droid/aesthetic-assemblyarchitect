@@ -188,7 +188,21 @@ export async function analyzeUpdate(
   };
 }
 
+/**
+ * Split a free-text observation into short, scannable points so a rescuer
+ * reads a handover list instead of a paragraph.
+ */
+export function toPoints(text: string): string[] {
+  return text
+    .split(/\r?\n+|(?<=[.!?;])\s+|\s+(?:and then|then|also|but)\s+/i)
+    .map((s) => s.replace(/^[-•*\s]+/, "").trim())
+    .filter((s) => s.length > 1)
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .map((s) => s.replace(/[.;]+$/, ""));
+}
+
 export function timeAgo(iso: string): string {
+
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "just now";
