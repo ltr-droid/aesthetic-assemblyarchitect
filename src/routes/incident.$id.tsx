@@ -88,41 +88,41 @@ function IncidentPage() {
 
   return (
     <main className="surface-calm min-h-screen pb-32">
-      <div className="mx-auto w-full max-w-[800px] px-5 pt-8">
+      <div className="mx-auto w-full max-w-[720px] px-5 pt-8">
         <header className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="flex size-9 items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]">
               <Radio className="size-4" />
             </span>
             <span className="text-lg font-bold tracking-tight">Handoff</span>
           </Link>
           <button
             onClick={() => setShowShare(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-card px-3 text-sm font-semibold transition hover:border-ring"
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-semibold shadow-[var(--shadow-card)] transition hover:border-ring"
           >
             <Share2 className="size-4 text-primary" /> Hand off
           </button>
         </header>
 
         {alertBanner && (
-          <div className="mt-6 flex items-start gap-3 rounded-xl border border-critical/30 bg-critical-soft p-4">
+          <div className="rise-in mt-6 flex items-start gap-3 rounded-2xl border border-critical/25 bg-critical-soft p-4">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-critical" />
             <p className="text-sm font-semibold text-critical">NEW: {alertBanner}</p>
           </div>
         )}
 
-        <section
-          className={`card-elevated mt-6 overflow-hidden ${high ? "border-critical/40" : ""}`}
-        >
-          <div className={`flex items-center gap-2 px-6 py-3 ${high ? "bg-critical text-critical-foreground" : "bg-calm-soft text-foreground"}`}>
-            {high ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4 text-calm" />}
+        <section className={`card-elevated rise-in mt-6 overflow-hidden ${high ? "border-critical/30" : ""}`}>
+          <div
+            className={`flex items-center gap-2 px-6 py-3 ${high ? "bg-critical text-critical-foreground" : "bg-calm-soft text-calm"}`}
+          >
+            {high ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
             <span className="mono-caps">{high ? "High priority" : "Stable — monitor"}</span>
           </div>
 
-          <div className="p-6">
-            <h1 className="text-2xl font-bold leading-snug text-foreground">{state.summary}</h1>
+          <div className="p-6 sm:p-7">
+            <h1 className="text-[1.6rem] font-bold leading-snug tracking-tight text-foreground">{state.summary}</h1>
 
-            <dl className="mt-5 grid grid-cols-2 gap-3">
+            <dl className="mt-6 grid grid-cols-2 gap-2.5">
               <Fact label="Consciousness" value={labelize(state.consciousness)} />
               <Fact label="Breathing" value={state.breathing === "yes" ? "Confirmed" : state.breathing === "no" ? "Not breathing" : "Unknown"} danger={state.breathing === "no"} />
               <Fact
@@ -132,7 +132,7 @@ function IncidentPage() {
               <Fact label="Reported by" value={incident.creator_name} />
             </dl>
 
-            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-4 text-primary" />
                 {incident.location || "Location not recorded"}
@@ -144,6 +144,7 @@ function IncidentPage() {
             </div>
           </div>
         </section>
+
 
         <section className="mt-10">
           <h2 className="mono-caps text-muted-foreground">Timeline · {incident.timeline.length} entries</h2>
