@@ -88,41 +88,41 @@ function IncidentPage() {
 
   return (
     <main className="surface-calm min-h-screen pb-32">
-      <div className="mx-auto w-full max-w-[800px] px-5 pt-8">
+      <div className="mx-auto w-full max-w-[720px] px-5 pt-8">
         <header className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="flex size-9 items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]">
               <Radio className="size-4" />
             </span>
             <span className="text-lg font-bold tracking-tight">Handoff</span>
           </Link>
           <button
             onClick={() => setShowShare(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-card px-3 text-sm font-semibold transition hover:border-ring"
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-semibold shadow-[var(--shadow-card)] transition hover:border-ring"
           >
             <Share2 className="size-4 text-primary" /> Hand off
           </button>
         </header>
 
         {alertBanner && (
-          <div className="mt-6 flex items-start gap-3 rounded-xl border border-critical/30 bg-critical-soft p-4">
+          <div className="rise-in mt-6 flex items-start gap-3 rounded-2xl border border-critical/25 bg-critical-soft p-4">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-critical" />
             <p className="text-sm font-semibold text-critical">NEW: {alertBanner}</p>
           </div>
         )}
 
-        <section
-          className={`card-elevated mt-6 overflow-hidden ${high ? "border-critical/40" : ""}`}
-        >
-          <div className={`flex items-center gap-2 px-6 py-3 ${high ? "bg-critical text-critical-foreground" : "bg-calm-soft text-foreground"}`}>
-            {high ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4 text-calm" />}
+        <section className={`card-elevated rise-in mt-6 overflow-hidden ${high ? "border-critical/30" : ""}`}>
+          <div
+            className={`flex items-center gap-2 px-6 py-3 ${high ? "bg-critical text-critical-foreground" : "bg-calm-soft text-calm"}`}
+          >
+            {high ? <AlertTriangle className="size-4" /> : <CheckCircle2 className="size-4" />}
             <span className="mono-caps">{high ? "High priority" : "Stable — monitor"}</span>
           </div>
 
-          <div className="p-6">
-            <h1 className="text-2xl font-bold leading-snug text-foreground">{state.summary}</h1>
+          <div className="p-6 sm:p-7">
+            <h1 className="text-[1.6rem] font-bold leading-snug tracking-tight text-foreground">{state.summary}</h1>
 
-            <dl className="mt-5 grid grid-cols-2 gap-3">
+            <dl className="mt-6 grid grid-cols-2 gap-2.5">
               <Fact label="Consciousness" value={labelize(state.consciousness)} />
               <Fact label="Breathing" value={state.breathing === "yes" ? "Confirmed" : state.breathing === "no" ? "Not breathing" : "Unknown"} danger={state.breathing === "no"} />
               <Fact
@@ -132,7 +132,7 @@ function IncidentPage() {
               <Fact label="Reported by" value={incident.creator_name} />
             </dl>
 
-            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-4 text-primary" />
                 {incident.location || "Location not recorded"}
@@ -144,6 +144,7 @@ function IncidentPage() {
             </div>
           </div>
         </section>
+
 
         <section className="mt-10">
           <h2 className="mono-caps text-muted-foreground">Timeline · {incident.timeline.length} entries</h2>
@@ -213,11 +214,15 @@ function IncidentPage() {
         )}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/90 px-5 py-3 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[800px] gap-3">
+      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/85 px-5 py-3 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[720px] gap-3">
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="inline-flex h-14 flex-1 items-center justify-center rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-[var(--shadow-lift)] transition hover:brightness-110 active:scale-[0.99]"
+            className={`inline-flex h-[3.5rem] flex-1 items-center justify-center text-[1.05rem] font-semibold transition active:scale-[0.985] ${
+              showForm
+                ? "rounded-2xl border border-border bg-secondary text-foreground"
+                : "btn-primary-soft hover:brightness-[1.06]"
+            }`}
           >
             {showForm ? "Cancel" : "Add update"}
           </button>
@@ -235,12 +240,15 @@ function labelize(v: string) {
 
 function Fact({ label, value, danger }: { label: string; value: string; danger?: boolean }) {
   return (
-    <div className="rounded-xl bg-secondary p-3">
+    <div className={`rounded-2xl p-3.5 ${danger ? "bg-critical-soft" : "tile-soft"}`}>
       <dt className="mono-caps text-muted-foreground">{label}</dt>
-      <dd className={`mt-1 text-base font-semibold ${danger ? "text-critical" : "text-foreground"}`}>{value}</dd>
+      <dd className={`mt-1.5 text-[0.95rem] font-semibold leading-snug ${danger ? "text-critical" : "text-foreground"}`}>
+        {value}
+      </dd>
     </div>
   );
 }
+
 
 function SharePanel({ incident, onClose }: { incident: Incident; onClose: () => void }) {
   const [qr, setQr] = useState<string>("");

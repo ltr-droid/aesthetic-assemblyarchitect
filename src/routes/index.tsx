@@ -33,43 +33,50 @@ function Home() {
 
   return (
     <main className="min-h-screen surface-calm">
-      <div className="mx-auto w-full max-w-[800px] px-5 pb-24 pt-10 sm:pt-16">
-        <header className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Radio className="size-4" />
+      <div className="mx-auto w-full max-w-[720px] px-5 pb-24 pt-8 sm:pt-14">
+        <header className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-9 items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]">
+              <Radio className="size-4" />
+            </span>
+            <span className="text-lg font-bold tracking-tight">Handoff</span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-calm-soft px-3 py-1.5 text-xs font-semibold text-calm">
+            <ShieldCheck className="size-3.5" /> Stays on your device
           </span>
-          <span className="text-lg font-bold tracking-tight">Handoff</span>
         </header>
 
-        <h1 className="mt-10 text-4xl font-extrabold leading-[1.05] text-foreground sm:text-5xl">
-          First person on scene.
-          <br />
-          <span className="text-primary">No training required.</span>
-        </h1>
-        <p className="mt-4 max-w-lg text-lg leading-relaxed text-muted-foreground">
-          Just tell us what you see. We turn it into a hand-off so perfect, the next rescuer knows everything.
-          One link. One scan.
-        </p>
+        <section className="rise-in mt-12 text-center">
+          <h1 className="text-[2.6rem] font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-[3.25rem]">
+            You&rsquo;re not alone
+            <br />
+            <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">in this moment.</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-md text-[1.05rem] leading-relaxed text-muted-foreground">
+            Tell us what you see, in your own words. We turn it into one calm, clear record the next
+            rescuer can scan and continue.
+          </p>
+        </section>
 
-        <ul className="mt-8 flex flex-wrap gap-2">
+        <ul className="mt-8 grid grid-cols-3 gap-2.5">
           {[
-            { icon: QrCode, label: "Share by QR or link" },
-            { icon: ShieldCheck, label: "Critical changes flagged" },
+            { icon: QrCode, label: "Share by QR" },
+            { icon: ShieldCheck, label: "Changes flagged" },
             { icon: Radio, label: "Live timeline" },
           ].map(({ icon: Icon, label }) => (
             <li
               key={label}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground"
+              className="tile-soft flex flex-col items-center gap-2 px-2 py-4 text-center text-[0.8rem] font-medium text-muted-foreground"
             >
-              <Icon className="size-3.5 text-primary" />
+              <Icon className="size-4 text-primary" />
               {label}
             </li>
           ))}
         </ul>
 
-        <section className="card-elevated mt-10 p-6 sm:p-8">
+        <section className="card-elevated rise-in mt-6 p-6 sm:p-8">
           <IncidentForm
-            heading="Create emergency record"
+            heading="Start an emergency record"
             hint="Three or four sentences is plenty. What happened, and what do you see right now?"
             placeholder="Man fell off his bike on Samora Machel Ave. He's awake but confused, bleeding from his forehead."
             submitLabel="Create emergency record"
@@ -103,21 +110,21 @@ function Home() {
 
         {recent.length > 0 && (
           <section className="mt-10">
-            <h2 className="mono-caps text-muted-foreground">Records on this device</h2>
-            <div className="mt-3 flex flex-col gap-2">
+            <h2 className="mono-caps px-1 text-muted-foreground">Records on this device</h2>
+            <div className="card-elevated mt-3 divide-y divide-border overflow-hidden">
               {recent.map((inc) => (
                 <Link
                   key={inc.id}
                   to="/incident/$id"
                   params={{ id: inc.id }}
                   search={{ created: false }}
-                  className="card-elevated flex items-center justify-between gap-4 px-4 py-3 transition hover:border-ring"
+                  className="flex items-center justify-between gap-4 px-4 py-3.5 transition hover:bg-secondary"
                 >
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-semibold">{inc.structured_state.summary}</span>
                     <span className="mono-caps text-muted-foreground">{timeAgo(inc.created_at)}</span>
                   </span>
-                  <ArrowRight className="size-4 shrink-0 text-primary" />
+                  <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
                 </Link>
               ))}
             </div>
@@ -125,5 +132,6 @@ function Home() {
         )}
       </div>
     </main>
+
   );
 }
