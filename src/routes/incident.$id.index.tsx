@@ -137,7 +137,15 @@ function ViewIncident() {
                       <span className="font-mono text-sm font-bold text-foreground">{formatTime(entry.timestamp)}</span>
                       <span className="text-xs text-muted-foreground">{timeAgo(entry.timestamp)}</span>
                     </div>
-                    <p className="mt-2 text-[1.02rem] leading-relaxed text-foreground">{entry.observation}</p>
+                    <ul className="mt-2.5 flex flex-col gap-1.5">
+                      {toPoints(entry.observation).map((p, k) => (
+                        <li key={k} className="flex gap-2.5 text-[1.02rem] leading-snug text-foreground">
+                          <span className={`mt-[0.5rem] size-1.5 shrink-0 rounded-full ${critical ? "bg-critical" : "bg-primary"}`} />
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+
                     {critical && (
                       <p className="mt-3 inline-flex items-start gap-2 rounded-lg bg-critical/10 px-3 py-2 text-sm font-semibold text-critical">
                         <AlertTriangle className="mt-0.5 size-4 shrink-0" />
