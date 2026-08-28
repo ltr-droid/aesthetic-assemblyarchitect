@@ -104,9 +104,27 @@ export function IncidentForm({
           <span className="text-xs text-muted-foreground">
             {recording ? "Recording…" : transcribing ? "Transcribing your voice" : "Or tap to speak"}
           </span>
-
         </div>
       </div>
+
+      {voiceError && (
+        <p className="-mt-2 rounded-xl bg-critical-soft px-4 py-2.5 text-sm font-medium text-critical">{voiceError}</p>
+      )}
+
+      {points.length > 1 && (
+        <div className="tile-soft px-4 py-3">
+          <span className="mono-caps text-muted-foreground">How the next rescuer will read it</span>
+          <ul className="mt-2 flex flex-col gap-1.5">
+            {points.map((p, i) => (
+              <li key={i} className="flex gap-2 text-[0.95rem] leading-snug text-foreground">
+                <span className="mt-[0.45rem] size-1.5 shrink-0 rounded-full bg-primary" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
 
       {showLocation && (
         <label className="block">
