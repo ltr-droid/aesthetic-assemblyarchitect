@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { MapPin, Loader2, Mic, Square } from "lucide-react";
-import { useSpeechInput } from "@/lib/useSpeechInput";
+import { useVoiceInput } from "@/lib/useVoiceInput";
+import { toPoints } from "@/lib/incidents";
+
 
 interface Props {
   heading: string;
@@ -27,9 +29,12 @@ export function IncidentForm({
   const [locating, setLocating] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const { supported, listening, toggle } = useSpeechInput((text) =>
-    setReport((prev) => (prev ? `${prev.trim()} ${text}` : text)),
+  const { recording, transcribing, error: voiceError, toggle } = useVoiceInput((text) =>
+    setReport((prev) => (prev ? `${prev.trim()}\n${text}` : text)),
   );
+
+  const points = toPoints(report);
+
 
   useEffect(() => {
     if (!showLocation || typeof navigator === "undefined" || !navigator.geolocation) return;
@@ -79,22 +84,47 @@ export function IncidentForm({
           <button
             type="button"
             onClick={toggle}
-            disabled={!supported}
-            aria-pressed={listening}
+            disabled={transcribing}
+            aria-pressed={recording}
             className={`inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition active:scale-[0.97] ${
-              listening
+              recording
                 ? "bg-critical text-critical-foreground shadow-[var(--shadow-lift)]"
                 : "border border-border bg-card text-foreground hover:border-ring disabled:opacity-40"
             }`}
           >
-            {listening ? <Square className="size-4" /> : <Mic className="size-4 text-primary" />}
-            {listening ? "Stop" : "Speak"}
+            {transcribing ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : recording ? (
+              <Square className="size-4" />
+            ) : (
+              <Mic className="size-4 text-primary" />
+            )}
+            {transcribing ? "Writing it up…" : recording ? "Stop" : "Speak"}
           </button>
           <span className="text-xs text-muted-foreground">
-            {listening ? "Listening…" : supported ? "Or tap to speak" : "Typing only on this browser"}
+            {recording ? "Recording…" : transcribing ? "Transcribing your voice" : "Or tap to speak"}
           </span>
         </div>
       </div>
+
+      {voiceError && (
+        <p className="-mt-2 rounded-xl bg-critical-soft px-4 py-2.5 text-sm font-medium text-critical">{voiceError}</p>
+      )}
+
+      {points.length > 1 && (
+        <div className="tile-soft px-4 py-3">
+          <span className="mono-caps text-muted-foreground">How the next rescuer will read it</span>
+          <ul className="mt-2 flex flex-col gap-1.5">
+            {points.map((p, i) => (
+              <li key={i} className="flex gap-2 text-[0.95rem] leading-snug text-foreground">
+                <span className="mt-[0.45rem] size-1.5 shrink-0 rounded-full bg-primary" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
 
       {showLocation && (
         <label className="block">

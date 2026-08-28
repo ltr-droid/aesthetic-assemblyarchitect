@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
 import { Route as IncidentIdIndexRouteImport } from './routes/incident.$id.index'
 import { Route as IncidentIdShareRouteImport } from './routes/incident.$id.share'
 import { Route as IncidentIdUpdateRouteImport } from './routes/incident.$id.update'
@@ -17,6 +18,11 @@ import { Route as IncidentIdUpdateRouteImport } from './routes/incident.$id.upda
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IncidentIdIndexRoute = IncidentIdIndexRouteImport.update({
@@ -37,12 +43,14 @@ const IncidentIdUpdateRoute = IncidentIdUpdateRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
   '/incident/$id/': typeof IncidentIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
   '/incident/$id': typeof IncidentIdIndexRoute
@@ -50,6 +58,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
   '/incident/$id/': typeof IncidentIdIndexRoute
@@ -57,12 +66,22 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/incident/$id/share' | '/incident/$id/update' | '/incident/$id/'
+    | '/'
+    | '/api/transcribe'
+    | '/incident/$id/share'
+    | '/incident/$id/update'
+    | '/incident/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/incident/$id/share' | '/incident/$id/update' | '/incident/$id'
+  to:
+    | '/'
+    | '/api/transcribe'
+    | '/incident/$id/share'
+    | '/incident/$id/update'
+    | '/incident/$id'
   id:
     | '__root__'
     | '/'
+    | '/api/transcribe'
     | '/incident/$id/share'
     | '/incident/$id/update'
     | '/incident/$id/'
@@ -70,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
   IncidentIdShareRoute: typeof IncidentIdShareRoute
   IncidentIdUpdateRoute: typeof IncidentIdUpdateRoute
   IncidentIdIndexRoute: typeof IncidentIdIndexRoute
@@ -82,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/incident/$id/': {
@@ -110,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
   IncidentIdShareRoute: IncidentIdShareRoute,
   IncidentIdUpdateRoute: IncidentIdUpdateRoute,
   IncidentIdIndexRoute: IncidentIdIndexRoute,
