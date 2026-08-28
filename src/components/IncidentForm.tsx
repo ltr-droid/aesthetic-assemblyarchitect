@@ -60,7 +60,10 @@ export function IncidentForm({
         if (disabled) return;
         setBusy(true);
         try {
-          await onSubmit({ report: report.trim(), location: location.trim(), name: name.trim() });
+          // Save the AI-tidied points when available so the timeline reads the same.
+          const finalReport = assisted && points.length ? points.join("\n") : report.trim();
+          await onSubmit({ report: finalReport, location: location.trim(), name: name.trim() });
+
           setReport("");
         } finally {
           setBusy(false);
