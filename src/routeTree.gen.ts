@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IncidentIdIndexRouteImport } from './routes/incident.$id.index'
 import { Route as IncidentIdShareRouteImport } from './routes/incident.$id.share'
+import { Route as IncidentIdUpdateRouteImport } from './routes/incident.$id.update'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncidentIdIndexRoute = IncidentIdIndexRouteImport.update({
+  id: '/incident/$id/',
+  path: '/incident/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IncidentIdShareRoute = IncidentIdShareRouteImport.update({
@@ -22,31 +29,50 @@ const IncidentIdShareRoute = IncidentIdShareRouteImport.update({
   path: '/incident/$id/share',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IncidentIdUpdateRoute = IncidentIdUpdateRouteImport.update({
+  id: '/incident/$id/update',
+  path: '/incident/$id/update',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
+  '/incident/$id/update': typeof IncidentIdUpdateRoute
+  '/incident/$id/': typeof IncidentIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
+  '/incident/$id/update': typeof IncidentIdUpdateRoute
+  '/incident/$id': typeof IncidentIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
+  '/incident/$id/update': typeof IncidentIdUpdateRoute
+  '/incident/$id/': typeof IncidentIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/incident/$id/share'
+  fullPaths:
+    '/' | '/incident/$id/share' | '/incident/$id/update' | '/incident/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/incident/$id/share'
-  id: '__root__' | '/' | '/incident/$id/share'
+  to: '/' | '/incident/$id/share' | '/incident/$id/update' | '/incident/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/incident/$id/share'
+    | '/incident/$id/update'
+    | '/incident/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IncidentIdShareRoute: typeof IncidentIdShareRoute
+  IncidentIdUpdateRoute: typeof IncidentIdUpdateRoute
+  IncidentIdIndexRoute: typeof IncidentIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +84,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/incident/$id/': {
+      id: '/incident/$id/'
+      path: '/incident/$id'
+      fullPath: '/incident/$id/'
+      preLoaderRoute: typeof IncidentIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/incident/$id/share': {
       id: '/incident/$id/share'
       path: '/incident/$id/share'
       fullPath: '/incident/$id/share'
       preLoaderRoute: typeof IncidentIdShareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/incident/$id/update': {
+      id: '/incident/$id/update'
+      path: '/incident/$id/update'
+      fullPath: '/incident/$id/update'
+      preLoaderRoute: typeof IncidentIdUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -71,6 +111,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IncidentIdShareRoute: IncidentIdShareRoute,
+  IncidentIdUpdateRoute: IncidentIdUpdateRoute,
+  IncidentIdIndexRoute: IncidentIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
