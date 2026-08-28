@@ -1,19 +1,21 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, QrCode, Radio, ShieldCheck } from "lucide-react";
+import { ArrowRight, QrCode, Activity, ShieldCheck } from "lucide-react";
 import { IncidentForm } from "@/components/IncidentForm";
+import { AppHeader } from "@/components/AppHeader";
+import { StepNav } from "@/components/StepNav";
 import { analyzeInitialReport, listIncidents, newId, saveIncident, timeAgo, type Incident } from "@/lib/incidents";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Handoff — Emergency Information Continuity" },
+      { title: "Handoff — Create an Emergency Record" },
       {
         name: "description",
         content:
-          "First person on scene? Tell us what you see. Handoff turns it into one link the next rescuer can scan, read and update.",
+          "First person on scene? Say or type what you see. Handoff turns it into one link the next rescuer can scan, read and update.",
       },
-      { property: "og:title", content: "Handoff — Emergency Information Continuity" },
+      { property: "og:title", content: "Handoff — Create an Emergency Record" },
       {
         property: "og:description",
         content: "One link. One scan. Nothing gets lost between the first rescuer and the paramedic.",
@@ -32,29 +34,20 @@ function Home() {
   useEffect(() => setRecent(listIncidents().slice(0, 3)), []);
 
   return (
-    <main className="min-h-screen surface-calm">
-      <div className="mx-auto w-full max-w-[720px] px-5 pb-24 pt-8 sm:pt-14">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-9 items-center justify-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]">
-              <Radio className="size-4" />
-            </span>
-            <span className="text-lg font-bold tracking-tight">Handoff</span>
-          </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-calm-soft px-3 py-1.5 text-xs font-semibold text-calm">
-            <ShieldCheck className="size-3.5" /> Stays on your device
-          </span>
-        </header>
+    <main className="surface-calm min-h-screen">
+      <div className="mx-auto w-full max-w-[720px] px-5 pb-24 pt-8">
+        <AppHeader />
+        <StepNav current="create" />
 
-        <section className="rise-in mt-12 text-center">
-          <h1 className="text-[2.6rem] font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-[3.25rem]">
-            You&rsquo;re not alone
+        <section className="rise-in mt-10 text-center">
+          <h1 className="text-[2.8rem] font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-[3.4rem]">
+            What do you
             <br />
-            <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">in this moment.</span>
+            <span className="bg-[image:var(--gradient-primary)] bg-clip-text text-transparent">see?</span>
           </h1>
           <p className="mx-auto mt-5 max-w-md text-[1.05rem] leading-relaxed text-muted-foreground">
-            Tell us what you see, in your own words. We turn it into one calm, clear record the next
-            rescuer can scan and continue.
+            Say it in your own words. We turn it into one calm, clear record the next rescuer can scan
+            and continue.
           </p>
         </section>
 
@@ -62,7 +55,7 @@ function Home() {
           {[
             { icon: QrCode, label: "Share by QR" },
             { icon: ShieldCheck, label: "Changes flagged" },
-            { icon: Radio, label: "Live timeline" },
+            { icon: Activity, label: "Live timeline" },
           ].map(({ icon: Icon, label }) => (
             <li
               key={label}
@@ -76,7 +69,7 @@ function Home() {
 
         <section className="card-elevated rise-in mt-6 p-6 sm:p-8">
           <IncidentForm
-            heading="Start an emergency record"
+            heading="Describe the emergency"
             hint="Three or four sentences is plenty. What happened, and what do you see right now?"
             placeholder="Man fell off his bike on Samora Machel Ave. He's awake but confused, bleeding from his forehead."
             submitLabel="Create emergency record"
@@ -103,7 +96,7 @@ function Home() {
                   },
                 ],
               });
-              navigate({ to: "/incident/$id", params: { id }, search: { created: true } });
+              navigate({ to: "/incident/$id/share", params: { id } });
             }}
           />
         </section>
@@ -117,7 +110,6 @@ function Home() {
                   key={inc.id}
                   to="/incident/$id"
                   params={{ id: inc.id }}
-                  search={{ created: false }}
                   className="flex items-center justify-between gap-4 px-4 py-3.5 transition hover:bg-secondary"
                 >
                   <span className="min-w-0">
@@ -132,6 +124,5 @@ function Home() {
         )}
       </div>
     </main>
-
   );
 }
