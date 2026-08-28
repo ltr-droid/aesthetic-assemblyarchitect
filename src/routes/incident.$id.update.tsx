@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { StepNav } from "@/components/StepNav";
 import { IncidentMissing } from "@/components/IncidentMissing";
 import { IncidentForm } from "@/components/IncidentForm";
-import { analyzeUpdate, formatTime, loadIncident, newId, saveIncident, type Incident } from "@/lib/incidents";
+import { analyzeUpdate, formatTime, loadIncident, newId, saveIncident, toPoints, type Incident } from "@/lib/incidents";
 
 export const Route = createFileRoute("/incident/$id/update")({
   head: () => ({
@@ -56,7 +56,15 @@ function UpdatePage() {
             {prior.map((entry) => (
               <div key={entry.id} className="tile-soft px-4 py-3">
                 <span className="font-mono text-xs font-bold text-muted-foreground">{formatTime(entry.timestamp)}</span>
-                <p className="mt-1 text-[0.98rem] leading-relaxed text-foreground">{entry.observation}</p>
+                <ul className="mt-1.5 flex flex-col gap-1">
+                  {toPoints(entry.observation).map((p, k) => (
+                    <li key={k} className="flex gap-2 text-[0.98rem] leading-snug text-foreground">
+                      <span className="mt-[0.45rem] size-1.5 shrink-0 rounded-full bg-primary" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+
                 <p className="mt-1.5 text-xs text-muted-foreground">{entry.added_by || "Anonymous"}</p>
               </div>
             ))}

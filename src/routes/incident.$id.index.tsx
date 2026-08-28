@@ -4,7 +4,7 @@ import { AlertTriangle, CheckCircle2, Clock, MapPin, PenLine, QrCode } from "luc
 import { AppHeader } from "@/components/AppHeader";
 import { StepNav } from "@/components/StepNav";
 import { IncidentMissing } from "@/components/IncidentMissing";
-import { formatTime, loadIncident, timeAgo, type Incident } from "@/lib/incidents";
+import { formatTime, loadIncident, timeAgo, toPoints, type Incident } from "@/lib/incidents";
 
 export const Route = createFileRoute("/incident/$id/")({
   validateSearch: (search: Record<string, unknown>) => ({
