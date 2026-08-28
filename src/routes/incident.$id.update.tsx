@@ -44,6 +44,7 @@ function UpdatePage() {
         <Link
           to="/incident/$id"
           params={{ id }}
+          search={{ updated: false }}
           className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground"
         >
           <ArrowLeft className="size-4" /> Back to timeline

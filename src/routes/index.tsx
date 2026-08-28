@@ -110,6 +110,7 @@ function Home() {
                   key={inc.id}
                   to="/incident/$id"
                   params={{ id: inc.id }}
+                  search={{ updated: false }}
                   className="flex items-center justify-between gap-4 px-4 py-3.5 transition hover:bg-secondary"
                 >
                   <span className="min-w-0">

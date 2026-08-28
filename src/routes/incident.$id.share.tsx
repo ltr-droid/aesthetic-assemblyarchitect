@@ -114,6 +114,7 @@ function SharePage() {
           <Link
             to="/incident/$id"
             params={{ id }}
+            search={{ updated: false }}
             className="btn-primary-soft inline-flex h-[3.75rem] w-full items-center justify-center gap-2 text-[1.05rem] font-semibold hover:brightness-[1.06] active:scale-[0.985]"
           >
             Open the live record <ArrowRight className="size-5" />
