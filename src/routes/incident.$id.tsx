@@ -214,11 +214,15 @@ function IncidentPage() {
         )}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/90 px-5 py-3 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[800px] gap-3">
+      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/85 px-5 py-3 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[720px] gap-3">
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="inline-flex h-14 flex-1 items-center justify-center rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-[var(--shadow-lift)] transition hover:brightness-110 active:scale-[0.99]"
+            className={`inline-flex h-[3.5rem] flex-1 items-center justify-center text-[1.05rem] font-semibold transition active:scale-[0.985] ${
+              showForm
+                ? "rounded-2xl border border-border bg-secondary text-foreground"
+                : "btn-primary-soft hover:brightness-[1.06]"
+            }`}
           >
             {showForm ? "Cancel" : "Add update"}
           </button>
@@ -236,12 +240,15 @@ function labelize(v: string) {
 
 function Fact({ label, value, danger }: { label: string; value: string; danger?: boolean }) {
   return (
-    <div className="rounded-xl bg-secondary p-3">
+    <div className={`rounded-2xl p-3.5 ${danger ? "bg-critical-soft" : "tile-soft"}`}>
       <dt className="mono-caps text-muted-foreground">{label}</dt>
-      <dd className={`mt-1 text-base font-semibold ${danger ? "text-critical" : "text-foreground"}`}>{value}</dd>
+      <dd className={`mt-1.5 text-[0.95rem] font-semibold leading-snug ${danger ? "text-critical" : "text-foreground"}`}>
+        {value}
+      </dd>
     </div>
   );
 }
+
 
 function SharePanel({ incident, onClose }: { incident: Incident; onClose: () => void }) {
   const [qr, setQr] = useState<string>("");
