@@ -84,20 +84,27 @@ export function IncidentForm({
           <button
             type="button"
             onClick={toggle}
-            disabled={!supported}
-            aria-pressed={listening}
+            disabled={transcribing}
+            aria-pressed={recording}
             className={`inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition active:scale-[0.97] ${
-              listening
+              recording
                 ? "bg-critical text-critical-foreground shadow-[var(--shadow-lift)]"
                 : "border border-border bg-card text-foreground hover:border-ring disabled:opacity-40"
             }`}
           >
-            {listening ? <Square className="size-4" /> : <Mic className="size-4 text-primary" />}
-            {listening ? "Stop" : "Speak"}
+            {transcribing ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : recording ? (
+              <Square className="size-4" />
+            ) : (
+              <Mic className="size-4 text-primary" />
+            )}
+            {transcribing ? "Writing it up…" : recording ? "Stop" : "Speak"}
           </button>
           <span className="text-xs text-muted-foreground">
-            {listening ? "Listening…" : supported ? "Or tap to speak" : "Typing only on this browser"}
+            {recording ? "Recording…" : transcribing ? "Transcribing your voice" : "Or tap to speak"}
           </span>
+
         </div>
       </div>
 
