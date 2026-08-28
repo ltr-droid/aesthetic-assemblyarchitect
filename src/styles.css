@@ -172,18 +172,57 @@
 
 @utility surface-calm {
   background-image: var(--gradient-calm);
+  background-attachment: fixed;
 }
 
 @utility card-elevated {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
+}
+
+@utility tile-soft {
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-lg);
+}
+
+@utility field-soft {
+  background-color: var(--color-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+@utility field-soft-focus {
+  background-color: var(--color-card);
+  border-color: var(--color-ring);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-ring) 14%, transparent);
+}
+
+@utility btn-primary-soft {
+  background-image: var(--gradient-primary);
+  color: var(--color-primary-foreground);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lift);
+  transition: transform 0.15s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
 @utility mono-caps {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.09em;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+@layer base {
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@utility rise-in {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
