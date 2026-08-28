@@ -29,9 +29,12 @@ export function IncidentForm({
   const [locating, setLocating] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const { supported, listening, toggle } = useSpeechInput((text) =>
-    setReport((prev) => (prev ? `${prev.trim()} ${text}` : text)),
+  const { recording, transcribing, error: voiceError, toggle } = useVoiceInput((text) =>
+    setReport((prev) => (prev ? `${prev.trim()}\n${text}` : text)),
   );
+
+  const points = toPoints(report);
+
 
   useEffect(() => {
     if (!showLocation || typeof navigator === "undefined" || !navigator.geolocation) return;
