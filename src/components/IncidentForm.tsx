@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { MapPin, Loader2, Mic, Square } from "lucide-react";
+import { MapPin, Loader2, Mic, Square, Sparkles } from "lucide-react";
 import { useVoiceInput } from "@/lib/useVoiceInput";
-import { toPoints } from "@/lib/incidents";
+import { useHandoffPoints } from "@/lib/useHandoffPoints";
+
 
 
 interface Props {
@@ -33,7 +34,7 @@ export function IncidentForm({
     setReport((prev) => (prev ? `${prev.trim()}\n${text}` : text)),
   );
 
-  const points = toPoints(report);
+  const { points, assisted, tidying } = useHandoffPoints(report);
 
 
   useEffect(() => {
@@ -59,7 +60,10 @@ export function IncidentForm({
         if (disabled) return;
         setBusy(true);
         try {
-          await onSubmit({ report: report.trim(), location: location.trim(), name: name.trim() });
+          // Save the AI-tidied points when available so the timeline reads the same.
+          const finalReport = assisted && points.length ? points.join("\n") : report.trim();
+          await onSubmit({ report: finalReport, location: location.trim(), name: name.trim() });
+
           setReport("");
         } finally {
           setBusy(false);
@@ -113,7 +117,18 @@ export function IncidentForm({
 
       {points.length > 1 && (
         <div className="tile-soft px-4 py-3">
-          <span className="mono-caps text-muted-foreground">How the next rescuer will read it</span>
+          <div className="flex items-center justify-between gap-3">
+            <span className="mono-caps text-muted-foreground">How the next rescuer will read it</span>
+            {tidying ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Loader2 className="size-3.5 animate-spin" /> Tidying
+              </span>
+            ) : assisted ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
+                <Sparkles className="size-3.5" /> AI tidied
+              </span>
+            ) : null}
+          </div>
           <ul className="mt-2 flex flex-col gap-1.5">
             {points.map((p, i) => (
               <li key={i} className="flex gap-2 text-[0.95rem] leading-snug text-foreground">
@@ -124,6 +139,7 @@ export function IncidentForm({
           </ul>
         </div>
       )}
+
 
 
       {showLocation && (

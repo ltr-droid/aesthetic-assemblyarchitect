@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPointsRouteImport } from './routes/api/points'
 import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
 import { Route as IncidentIdIndexRouteImport } from './routes/incident.$id.index'
 import { Route as IncidentIdShareRouteImport } from './routes/incident.$id.share'
@@ -18,6 +19,11 @@ import { Route as IncidentIdUpdateRouteImport } from './routes/incident.$id.upda
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPointsRoute = ApiPointsRouteImport.update({
+  id: '/api/points',
+  path: '/api/points',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
@@ -43,6 +49,7 @@ const IncidentIdUpdateRoute = IncidentIdUpdateRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/points': typeof ApiPointsRoute
   '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/points': typeof ApiPointsRoute
   '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/points': typeof ApiPointsRoute
   '/api/transcribe': typeof ApiTranscribeRoute
   '/incident/$id/share': typeof IncidentIdShareRoute
   '/incident/$id/update': typeof IncidentIdUpdateRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/points'
     | '/api/transcribe'
     | '/incident/$id/share'
     | '/incident/$id/update'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/points'
     | '/api/transcribe'
     | '/incident/$id/share'
     | '/incident/$id/update'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/api/points'
     | '/api/transcribe'
     | '/incident/$id/share'
     | '/incident/$id/update'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPointsRoute: typeof ApiPointsRoute
   ApiTranscribeRoute: typeof ApiTranscribeRoute
   IncidentIdShareRoute: typeof IncidentIdShareRoute
   IncidentIdUpdateRoute: typeof IncidentIdUpdateRoute
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/points': {
+      id: '/api/points'
+      path: '/api/points'
+      fullPath: '/api/points'
+      preLoaderRoute: typeof ApiPointsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/transcribe': {
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPointsRoute: ApiPointsRoute,
   ApiTranscribeRoute: ApiTranscribeRoute,
   IncidentIdShareRoute: IncidentIdShareRoute,
   IncidentIdUpdateRoute: IncidentIdUpdateRoute,
