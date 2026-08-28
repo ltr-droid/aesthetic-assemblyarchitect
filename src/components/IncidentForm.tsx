@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { MapPin, Loader2, Mic, Square } from "lucide-react";
-import { useSpeechInput } from "@/lib/useSpeechInput";
+import { useVoiceInput } from "@/lib/useVoiceInput";
+import { toPoints } from "@/lib/incidents";
+
 
 interface Props {
   heading: string;
