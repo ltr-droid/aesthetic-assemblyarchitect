@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, Mic, Square } from "lucide-react";
+import { useSpeechInput } from "@/lib/useSpeechInput";
 
 interface Props {
   heading: string;
@@ -25,6 +26,10 @@ export function IncidentForm({
   const [name, setName] = useState(defaultName);
   const [locating, setLocating] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  const { supported, listening, toggle } = useSpeechInput((text) =>
+    setReport((prev) => (prev ? `${prev.trim()} ${text}` : text)),
+  );
 
   useEffect(() => {
     if (!showLocation || typeof navigator === "undefined" || !navigator.geolocation) return;
@@ -57,18 +62,38 @@ export function IncidentForm({
       }}
     >
       <div>
-        <h2 className="text-[1.6rem] font-bold tracking-tight text-foreground">{heading}</h2>
-        <p className="mt-1.5 text-[0.95rem] leading-relaxed text-muted-foreground">{hint}</p>
+        <h2 className="text-[1.9rem] font-extrabold leading-tight tracking-tight text-foreground">{heading}</h2>
+        <p className="mt-2 text-[1rem] leading-relaxed text-muted-foreground">{hint}</p>
       </div>
 
-      <div className="field-soft focus-within:field-soft-focus">
+      <div className="field-soft relative focus-within:field-soft-focus">
         <textarea
           value={report}
           onChange={(e) => setReport(e.target.value)}
           placeholder={placeholder}
-          rows={5}
-          className="w-full resize-none bg-transparent p-4 text-base leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/70"
+          rows={6}
+          aria-label={heading}
+          className="w-full resize-none bg-transparent p-4 pb-16 text-[1.05rem] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/70"
         />
+        <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={toggle}
+            disabled={!supported}
+            aria-pressed={listening}
+            className={`inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold transition active:scale-[0.97] ${
+              listening
+                ? "bg-critical text-critical-foreground shadow-[var(--shadow-lift)]"
+                : "border border-border bg-card text-foreground hover:border-ring disabled:opacity-40"
+            }`}
+          >
+            {listening ? <Square className="size-4" /> : <Mic className="size-4 text-primary" />}
+            {listening ? "Stop" : "Speak"}
+          </button>
+          <span className="text-xs text-muted-foreground">
+            {listening ? "Listening…" : supported ? "Or tap to speak" : "Typing only on this browser"}
+          </span>
+        </div>
       </div>
 
       {showLocation && (
@@ -99,18 +124,19 @@ export function IncidentForm({
         </div>
       </label>
 
-      <button
-        type="submit"
-        disabled={disabled}
-        className="btn-primary-soft inline-flex h-[3.5rem] w-full items-center justify-center gap-2 text-[1.05rem] font-semibold hover:brightness-[1.06] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
-      >
-        {busy && <Loader2 className="size-5 animate-spin" />}
-        {busy ? "Saving…" : submitLabel}
-      </button>
+      <div className="sticky bottom-4 z-10">
+        <button
+          type="submit"
+          disabled={disabled}
+          className="btn-primary-soft inline-flex h-[3.75rem] w-full items-center justify-center gap-2 text-[1.1rem] font-semibold hover:brightness-[1.06] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+        >
+          {busy && <Loader2 className="size-5 animate-spin" />}
+          {busy ? "Saving…" : submitLabel}
+        </button>
+      </div>
       <p className="-mt-1 text-center text-xs text-muted-foreground">
         Plain words are fine. You can add more at any time.
       </p>
     </form>
   );
 }
-
